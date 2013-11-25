@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:https="http://www.mulesoft.org/schema/mule/https" xmlns:jdbc-ee="http://www.mulesoft.org/schema/mule/ee/jdbc"
+	xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.4.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd
+http://www.mulesoft.org/schema/mule/https http://www.mulesoft.org/schema/mule/https/current/mule-https.xsd
+http://www.mulesoft.org/schema/mule/ee/jdbc http://www.mulesoft.org/schema/mule/ee/jdbc/current/mule-jdbc-ee.xsd
+http://www.mulesoft.org/schema/mule/cxf http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+
+	<mulexml:namespace-manager
+		includeConfigNamespaces="false">
+		<mulexml:namespace prefix="soapenv"
+			uri="http://schemas.xmlsoap.org/soap/envelope/" />
+		<mulexml:namespace prefix="urn"
+			uri="urn:riv:itintegration:registry:1" />
+		<mulexml:namespace prefix="urn1"
+			uri="urn:riv:itintegration:monitoring:PingForConfigurationResponder:1" />
+	</mulexml:namespace-manager>
+
+	<flow name="PFCAdapterService-service" doc:name="PFCAdapterService-service">
+		<https:inbound-endpoint exchange-pattern="request-response"
+			address="https://${TP_HOST}:${TP_PORT}/${TP_BASE_URI}/itintegration/monitoring/PingForConfiguration2/1/rivtabp21"
+			connector-ref="VPProducerConnector" doc:name="HTTP" />
+
+		<object-to-string-transformer doc:name="Object to String" />
+
+
+		<set-variable variableName="nameSpace"
+			value="#[xpath('/soapenv:Envelope/soapenv:Body/urn1:PingForConfiguration/urn1:serviceContractNamespace').text]"
+			doc:name="Set namespace" />
+		<set-variable variableName="logicalAddress"
+			value="#[xpath('/soapenv:Envelope/soapenv:Body/urn1:PingForConfiguration/urn1:logicalAddress').text]"
+			doc:name="Set Logical address" />
+
+
+		<cxf:proxy-service
+			namespace="urn:riv:itintegration:monitoring:PingForConfiguration2:1:rivtabp21"
+			service="PingForConfigurationResponderService" payload="envelope"
+			wsdlLocation="classpath:/schemas/interactions/PingForConfigurationInteraction/PingForConfigurationInteraction_1.0_RIVTABP21.wsdl"
+			doc:name="SOAP Proxy" />
+
+		<scripting:component doc:name="Create SOAP Address">
+			<scripting:script engine="Groovy"><![CDATA[def nameSpace = flowVars.nameSpace
+def logicalAddress = flowVars.logicalAddress
+
+if ( nameSpace == "urn:riv:clinicalprocess:logistics:logistics" ) {
+	if ( logicalAddress == "SE2321000016-A1DB" ) {
+		flowVars['httpAddress'] = "33.33.33.33:8088/mockPingForConfigurationResponderBinding"
+	}
+}
+else if ( nameSpace == "urn:riv:clinicalprocess:healthcond:actoutcome" ) {
+	if ( logicalAddress == "SE2321000016-A1DB" ) {
+		flowVars['httpAddress'] = "33.33.33.33:8088/mockPingForConfigurationResponderBinding"
+	}
+}
+else if ( nameSpace == "urn:riv:clinicalprocess:healthcond:description" ) {
+	if ( logicalAddress == "SE2321000016-A1DB" ) {
+		flowVars['httpAddress'] = "33.33.33.33:8088/mockPingForConfigurationResponderBinding"
+	}
+}
+else {
+	flowVars['httpAddress'] = "Error message"
+	}
+
+return payload]]></scripting:script>
+		</scripting:component>
+
+
+
+		<!-- <logger message="#[message.payload]" level="INFO" doc:name="Logger"/> 
+			<cxf:proxy-service namespace="urn:riv:itintegration:monitoring:PingForConfiguration2:1:rivtabp21" 
+			service="PingForConfigurationResponderService" payload="envelope" wsdlLocation="classpath:/schemas/interactions/PingForConfigurationInteraction/PingForConfigurationInteraction_1.0_RIVTABP21.wsdl" 
+			doc:name="CallProducerService"/> -->
+		<http:outbound-endpoint exchange-pattern="request-response"
+			method="POST" address="http://#[httpAddress]" doc:name="HTTP" />
+		<custom-exception-strategy
+			class="org.soitoolkit.commons.mule.error.ServiceExceptionStrategy"></custom-exception-strategy>
+	</flow>
+</mule>
