@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:monitoring:PingForConfigurationResponder:1">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:PingForConfigurationResponse>
+         <urn:version>?</urn:version>
+         <urn:pingDateTime>?</urn:pingDateTime>
+         <!--Zero or more repetitions:-->
+         <urn:configuration>
+            <urn:name>Yay</urn:name>
+            <urn:value>Yay</urn:value>
+            <!--You may enter ANY elements at this point-->
+         </urn:configuration>
+         <!--You may enter ANY elements at this point-->
+      </urn:PingForConfigurationResponse>
+   </soapenv:Body>
+</soapenv:Envelope>

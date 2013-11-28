@@ -7,135 +7,250 @@
 		&lt;mulexml:namespace prefix=&quot;urn1&quot; uri=&quot;urn:riv:itintegration:monitoring:PingForConfigurationResponder:1&quot;/&gt;
 	&lt;/mulexml:namespace-manager&gt;</content>
     </global-unknown>
-    <flow SubFlow="false" name="PFCAdapterService-service" entity-id="5d331ded-7994-43c7-b731-117fa1d6006a">
+    <flow SubFlow="false" name="PFCAdapterService-service" entity-id="1c2730a1-44c3-46f9-81f9-b71668bc73f0">
         <properties>
-            <property name="processingStrategy2"/>
             <property name="processingStrategy"/>
+            <property name="processingStrategy2"/>
             <property name="bussinessEventsLabel"/>
-            <property name="tracking:enable-default-events"/>
             <property name="auxiliary;index" value="5"/>
+            <property name="tracking:enable-default-events"/>
         </properties>
         <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#1">
+            <graphicalData x="0" y="0" width="0" height="0"/>
             <endpoint direction="Inbound" message-exchange-pattern="RequestResponse" name="HTTP" type="http://www.mulesoft.org/schema/mule/http/endpoint" entity-id="HTTP#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
                 <properties>
-                    <property name="exchange-pattern" value="request-response"/>
-                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/https/endpoint"/>
-                    <property name="connector-ref-outbound" value="VPProducerConnector"/>
-                    <property name="httpLabel"/>
-                    <property name="host"/>
                     <property name="port"/>
-                    <property name="path"/>
-                    <property name="method"/>
-                    <property name="businessEventsLabel"/>
+                    <property name="contentType"/>
+                    <property name="password"/>
                     <property name="tracking:enable-default-events"/>
-                    <property name="address" value="https://${TP_HOST}:${TP_PORT}/${TP_BASE_URI}/itintegration/monitoring/PingForConfiguration2/1/rivtabp21"/>
+                    <property name="exchange-pattern" value="request-response"/>
                     <property name="encoding"/>
-                    <property name="disableTransportTransformer"/>
+                    <property name="path"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="auxiliary;index" value="6"/>
+                    <property name="connector-ref-outbound" value="VPProducerConnector"/>
                     <property name="mimeType"/>
                     <property name="responseTimeout"/>
+                    <property name="host"/>
+                    <property name="businessEventsLabel"/>
                     <property name="followRedirects"/>
-                    <property name="connector-ref" value="VPProducerConnector"/>
-                    <property name="ref"/>
-                    <property name="transformer-refs"/>
-                    <property name="responseTransformer-refs"/>
-                    <property name="user"/>
-                    <property name="password"/>
-                    <property name="contentType"/>
+                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/https/endpoint"/>
                     <property name="keep-alive"/>
-                    <property name="auxiliary;index" value="6"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="ref"/>
+                    <property name="httpLabel"/>
+                    <property name="transformer-refs"/>
+                    <property name="address" value="https://${TP_HOST}:${TP_PORT}/${TP_BASE_URI}/itintegration/monitoring/PingForConfiguration2/1/rivtabp21"/>
+                    <property name="method"/>
+                    <property name="user"/>
+                    <property name="connector-ref" value="VPProducerConnector"/>
                 </properties>
             </endpoint>
             <pattern name="Object to String" type="http://www.mulesoft.org/schema/mule/core/object-to-string-transformer" entity-id="Object to String#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
                 <properties>
                     <property name="returnClass"/>
                     <property name="ignoreBadInput"/>
                     <property name="encoding"/>
-                    <property name="mimeType"/>
                     <property name="auxiliary;index" value="7"/>
-                </properties>
-            </pattern>
-            <pattern name="Set namespace" type="http://www.mulesoft.org/schema/mule/core/variable-transformer" entity-id="Variable#1">
-                <properties>
-                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/core/set-variable"/>
-                    <property name="variableName" value="nameSpace"/>
-                    <property name="value" value="#[xpath('/soapenv:Envelope/soapenv:Body/urn1:PingForConfiguration/urn1:serviceContractNamespace').text]"/>
-                    <property name="auxiliary;index" value="8"/>
-                </properties>
-            </pattern>
-            <pattern name="Set Logical address" type="http://www.mulesoft.org/schema/mule/core/variable-transformer" entity-id="Variable#2">
-                <properties>
-                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/core/set-variable"/>
-                    <property name="variableName" value="logicalAddress"/>
-                    <property name="value" value="#[xpath('/soapenv:Envelope/soapenv:Body/urn1:PingForConfiguration/urn1:logicalAddress').text]"/>
-                    <property name="auxiliary;index" value="9"/>
-                </properties>
-            </pattern>
-            <pattern name="SOAP Proxy" type="http://www.mulesoft.org/schema/mule/cxf/soapComponent" entity-id="SOAP#1">
-                <properties>
-                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/cxf/proxy-service"/>
-                    <property name="configuration-ref"/>
-                    <property name="bindingId"/>
-                    <property name="port"/>
-                    <property name="namespace" value="urn:riv:itintegration:monitoring:PingForConfiguration2:1:rivtabp21"/>
-                    <property name="service" value="PingForConfigurationResponderService"/>
-                    <property name="onException"/>
-                    <property name="serviceClass"/>
-                    <property name="validationEnabled"/>
-                    <property name="payload" value="envelope"/>
-                    <property name="wsdlLocation" value="classpath:/schemas/interactions/PingForConfigurationInteraction/PingForConfigurationInteraction_1.0_RIVTABP21.wsdl"/>
-                    <property name="mtomEnabled"/>
-                    <property name="enableMuleSoapHeaders"/>
-                    <property name="soapVersion"/>
-                    <property name="auxiliary;index" value="10"/>
-                </properties>
-            </pattern>
-            <pattern name="Create SOAP Address" type="http://www.mulesoft.org/schema/mule/scripting/groovyComponent" entity-id="Groovy#1">
-                <properties>
-                    <property name="script-ref"/>
-                    <property name="auxiliary;index" value="11"/>
-                    <property-collection name="@http://www.mulesoft.org/schema/mule/scripting/script-for-properties;0">
-                        <property name="text" value="def nameSpace = flowVars.nameSpace&#xA;def logicalAddress = flowVars.logicalAddress&#xA;&#xA;if ( nameSpace == &quot;urn:riv:clinicalprocess:logistics:logistics&quot; ) {&#xA;&#x9;if ( logicalAddress == &quot;SE2321000016-A1DB&quot; ) {&#xA;&#x9;&#x9;flowVars['httpAddress'] = &quot;33.33.33.33:8088/mockPingForConfigurationResponderBinding&quot;&#xA;&#x9;}&#xA;}&#xA;else if ( nameSpace == &quot;urn:riv:clinicalprocess:healthcond:actoutcome&quot; ) {&#xA;&#x9;if ( logicalAddress == &quot;SE2321000016-A1DB&quot; ) {&#xA;&#x9;&#x9;flowVars['httpAddress'] = &quot;33.33.33.33:8088/mockPingForConfigurationResponderBinding&quot;&#xA;&#x9;}&#xA;}&#xA;else if ( nameSpace == &quot;urn:riv:clinicalprocess:healthcond:description&quot; ) {&#xA;&#x9;if ( logicalAddress == &quot;SE2321000016-A1DB&quot; ) {&#xA;&#x9;&#x9;flowVars['httpAddress'] = &quot;33.33.33.33:8088/mockPingForConfigurationResponderBinding&quot;&#xA;&#x9;}&#xA;}&#xA;else {&#xA;&#x9;flowVars['httpAddress'] = &quot;Error message&quot;&#xA;&#x9;}&#xA;&#xA;return payload"/>
-                        <property name="engine" value="Groovy"/>
-                        <property name="auxiliary;wrapIn" value="12"/>
-                        <property name="auxiliary;index" value="12"/>
-                    </property-collection>
-                    <property-collection name="@http://www.mulesoft.org/schema/mule/scripting/script;0">
-                        <property name="text" value="def nameSpace = flowVars.nameSpace&#xA;def logicalAddress = flowVars.logicalAddress&#xA;&#xA;if ( nameSpace == &quot;urn:riv:clinicalprocess:logistics:logistics&quot; ) {&#xA;&#x9;if ( logicalAddress == &quot;SE2321000016-A1DB&quot; ) {&#xA;&#x9;&#x9;flowVars['httpAddress'] = &quot;33.33.33.33:8088/mockPingForConfigurationResponderBinding&quot;&#xA;&#x9;}&#xA;}&#xA;else if ( nameSpace == &quot;urn:riv:clinicalprocess:healthcond:actoutcome&quot; ) {&#xA;&#x9;if ( logicalAddress == &quot;SE2321000016-A1DB&quot; ) {&#xA;&#x9;&#x9;flowVars['httpAddress'] = &quot;33.33.33.33:8088/mockPingForConfigurationResponderBinding&quot;&#xA;&#x9;}&#xA;}&#xA;else if ( nameSpace == &quot;urn:riv:clinicalprocess:healthcond:description&quot; ) {&#xA;&#x9;if ( logicalAddress == &quot;SE2321000016-A1DB&quot; ) {&#xA;&#x9;&#x9;flowVars['httpAddress'] = &quot;33.33.33.33:8088/mockPingForConfigurationResponderBinding&quot;&#xA;&#x9;}&#xA;}&#xA;else {&#xA;&#x9;flowVars['httpAddress'] = &quot;Error message&quot;&#xA;&#x9;}&#xA;&#xA;return payload"/>
-                        <property name="engine" value="Groovy"/>
-                        <property name="auxiliary;wrapIn" value="12"/>
-                        <property name="auxiliary;index" value="12"/>
-                    </property-collection>
-                </properties>
-            </pattern>
-            <endpoint direction="Outbound" message-exchange-pattern="RequestResponse" name="HTTP" type="http://www.mulesoft.org/schema/mule/http/endpoint" entity-id="HTTP#2">
-                <properties>
-                    <property name="exchange-pattern" value="request-response"/>
-                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/http/endpoint"/>
-                    <property name="httpLabel"/>
-                    <property name="host"/>
-                    <property name="port"/>
-                    <property name="path"/>
-                    <property name="method" value="POST"/>
-                    <property name="businessEventsLabel"/>
-                    <property name="tracking:enable-default-events"/>
-                    <property name="address" value="http://#[httpAddress]"/>
-                    <property name="encoding"/>
-                    <property name="disableTransportTransformer"/>
                     <property name="mimeType"/>
-                    <property name="responseTimeout"/>
-                    <property name="followRedirects"/>
-                    <property name="connector-ref"/>
-                    <property name="ref"/>
-                    <property name="transformer-refs"/>
-                    <property name="responseTransformer-refs"/>
-                    <property name="user"/>
-                    <property name="password"/>
-                    <property name="contentType"/>
-                    <property name="keep-alive"/>
-                    <property name="auxiliary;index" value="13"/>
                 </properties>
-            </endpoint>
-            <unknown description="false" index="14" entity-id="unknown#1">
+            </pattern>
+            <splitter index="8" name="Choice" type="org.mule.tooling.ui.modules.core.pattern.cbr" entity-id="Choice#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property-collection name="58cc0a8a-8d9b-425d-8654-3fca34df5820">
+                        <property name="choice.expression" value="#[!message.payload.startsWith('/')]"/>
+                        <property-collection name="choice.attributes">
+                            <property name="expression" value="#[!message.payload.startsWith('/')]"/>
+                        </property-collection>
+                    </property-collection>
+                    <property-collection name="a01e9185-bac6-4c04-b192-cf0c8d40430c">
+                        <property name="choice.otherwise" value="true"/>
+                        <property-collection name="choice.attributes"/>
+                    </property-collection>
+                </properties>
+                <pattern name="Choice" type="org.mule.tooling.ui.modules.core.pattern.cbr" entity-id="Choice#2"/>
+                <compartment entity-id="compartment#1">
+                    <lane hadOnlyOneElement="false" index="10" isChoiceOtherwiseLane="false" entity-id="58cc0a8a-8d9b-425d-8654-3fca34df5820">
+                        <pattern name="Set NameSpace" type="http://www.mulesoft.org/schema/mule/core/variable-transformer" entity-id="Variable#1">
+                            <graphicalData x="0" y="0" width="0" height="0"/>
+                            <properties>
+<property name="variableName" value="nameSpace"/>
+<property name="value" value="#[xpath('/soapenv:Envelope/soapenv:Body/urn1:PingForConfiguration/urn1:serviceContractNamespace').text]"/>
+<property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/core/set-variable"/>
+<property name="auxiliary;index" value="10"/>
+                            </properties>
+                        </pattern>
+                        <pattern name="set logicalAddress" type="http://www.mulesoft.org/schema/mule/core/variable-transformer" entity-id="Variable#2">
+                            <graphicalData x="0" y="0" width="0" height="0"/>
+                            <properties>
+<property name="variableName" value="logicalAddress"/>
+<property name="value" value="#[xpath('/soapenv:Envelope/soapenv:Body/urn1:PingForConfiguration/urn1:logicalAddress').text]"/>
+<property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/core/set-variable"/>
+<property name="auxiliary;index" value="11"/>
+                            </properties>
+                        </pattern>
+                        <pattern name="Read configXML" type="http://www.mulesoft.org/schema/mule/core/variable-transformer" entity-id="Variable#3">
+                            <graphicalData x="0" y="0" width="0" height="0"/>
+                            <properties>
+<property name="variableName" value="PFCAddresses"/>
+<property name="value" value="#[Thread.currentThread().getContextClassLoader().getResourceAsStream('PFCAddresses.xml')]"/>
+<property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/core/set-variable"/>
+<property name="auxiliary;index" value="12"/>
+                            </properties>
+                        </pattern>
+                        <pattern name="Groovy" type="http://www.mulesoft.org/schema/mule/scripting/groovyComponent" entity-id="Groovy#1">
+                            <graphicalData x="0" y="0" width="0" height="0"/>
+                            <properties>
+<property name="script-ref"/>
+<property name="auxiliary;index" value="13"/>
+<property-collection name="@http://www.mulesoft.org/schema/mule/scripting/script-for-properties;0">
+    <property name="text" value="def xml = PFCAddresses.getText()&#xA;def PFCAddresses = new XmlParser().parseText(xml)&#xA;log.info(&quot;PFCAddressesfile: &quot; + xml)&#xA;def nameSpace = flowVars.nameSpace&#xA;def logicalAddress = flowVars.logicaladdress&#xA;flowVars['SOAPAddress'] = 0&#xA;int&#x9;allAddresses = PFCAddresses.logicalAddress.size()&#xA;for (int i = 0; i &lt; allAddresses; i++)&#xA;{&#xA;&#x9;log.info(&quot;in address no: &quot; + i)&#xA;&#x9;if ( PFCAddresses.logicalAddress[i].'@value' == logicalAddress )&#xA;&#x9;{&#xA;&#x9;&#x9;log.info(&quot;logicalAddress is: &quot; + PFCAddresses.logicalAddress[i].'@value')&#xA;&#x9;&#x9;int allNamespaces = PFCAddresses.logicalAddress[i].nameSpace.size()&#xA;&#x9;&#x9;for (int j = 0; j &lt; allNamespaces; j++)&#xA;&#x9;&#x9;{&#x9; &#xA;&#x9;&#x9;log.info(&quot;in nameSpace no: &quot; + j)&#xA;&#x9;&#x9;if ( PFCAddresses.logicalAddress[i].nameSpace[j].'@value' == nameSpace )&#xA;&#x9;&#x9;&#x9;{ &#xA;&#x9;&#x9;&#x9;&#x9;log.info(&quot;found namespace: &quot; + PFCAddresses.logicalAddress[i].nameSpace[j].'@value' + &quot;setting SOAPAddress to: &quot; + PFCAddresses.logicalAddress[i].nameSpace[j].PFCAddress.text() )&#xA;&#x9;&#x9;&#x9;&#x9;flowVars.SOAPAddress = PFCAddresses.logicalAddress[i].nameSpace[j].PFCAddress.text()&#xA;&#x9;&#x9;&#x9;}&#xA;&#x9;&#x9;}&#xA;&#x9;}&#xA;}&#xA;&#xA;return payload"/>
+    <property name="engine" value="Groovy"/>
+    <property name="auxiliary;index" value="14"/>
+    <property name="auxiliary;wrapIn" value="14"/>
+</property-collection>
+<property-collection name="@http://www.mulesoft.org/schema/mule/scripting/script;0">
+    <property name="text" value="def xml = PFCAddresses.getText()&#xA;def PFCAddresses = new XmlParser().parseText(xml)&#xA;log.info(&quot;PFCAddressesfile: &quot; + xml)&#xA;def nameSpace = flowVars.nameSpace&#xA;def logicalAddress = flowVars.logicaladdress&#xA;flowVars['SOAPAddress'] = 0&#xA;int&#x9;allAddresses = PFCAddresses.logicalAddress.size()&#xA;for (int i = 0; i &lt; allAddresses; i++)&#xA;{&#xA;&#x9;log.info(&quot;in address no: &quot; + i)&#xA;&#x9;if ( PFCAddresses.logicalAddress[i].'@value' == logicalAddress )&#xA;&#x9;{&#xA;&#x9;&#x9;log.info(&quot;logicalAddress is: &quot; + PFCAddresses.logicalAddress[i].'@value')&#xA;&#x9;&#x9;int allNamespaces = PFCAddresses.logicalAddress[i].nameSpace.size()&#xA;&#x9;&#x9;for (int j = 0; j &lt; allNamespaces; j++)&#xA;&#x9;&#x9;{&#x9; &#xA;&#x9;&#x9;log.info(&quot;in nameSpace no: &quot; + j)&#xA;&#x9;&#x9;if ( PFCAddresses.logicalAddress[i].nameSpace[j].'@value' == nameSpace )&#xA;&#x9;&#x9;&#x9;{ &#xA;&#x9;&#x9;&#x9;&#x9;log.info(&quot;found namespace: &quot; + PFCAddresses.logicalAddress[i].nameSpace[j].'@value' + &quot;setting SOAPAddress to: &quot; + PFCAddresses.logicalAddress[i].nameSpace[j].PFCAddress.text() )&#xA;&#x9;&#x9;&#x9;&#x9;flowVars.SOAPAddress = PFCAddresses.logicalAddress[i].nameSpace[j].PFCAddress.text()&#xA;&#x9;&#x9;&#x9;}&#xA;&#x9;&#x9;}&#xA;&#x9;}&#xA;}&#xA;&#xA;return payload"/>
+    <property name="engine" value="Groovy"/>
+    <property name="auxiliary;index" value="14"/>
+    <property name="auxiliary;wrapIn" value="14"/>
+</property-collection>
+                            </properties>
+                        </pattern>
+                        <pattern name="Variable" type="http://www.mulesoft.org/schema/mule/core/variable-transformer" entity-id="Variable#4">
+                            <graphicalData x="0" y="0" width="0" height="0"/>
+                            <properties>
+<property name="variableName" value="logicalAdress"/>
+<property name="value" value="#[SOAPAddress]"/>
+<property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/core/set-variable"/>
+<property name="auxiliary;index" value="15"/>
+                            </properties>
+                        </pattern>
+                    </lane>
+                    <lane hadOnlyOneElement="false" index="17" isChoiceOtherwiseLane="true" entity-id="a01e9185-bac6-4c04-b192-cf0c8d40430c">
+                        <pattern name="Logger" type="http://www.mulesoft.org/schema/mule/core/logger" entity-id="Logger#1">
+                            <graphicalData x="0" y="0" width="0" height="0"/>
+                            <properties>
+<property name="message" value="WSDL request"/>
+<property name="category"/>
+<property name="level" value="INFO"/>
+<property name="auxiliary;index" value="17"/>
+                            </properties>
+                        </pattern>
+                    </lane>
+                </compartment>
+            </splitter>
+            <pattern name="SOAP" type="http://www.mulesoft.org/schema/mule/cxf/soapComponent" entity-id="SOAP#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="port"/>
+                    <property name="wsdlLocation" value="classpath:/schemas/interactions/PingForConfigurationInteraction/PingForConfigurationInteraction_1.0_RIVTABP21.wsdl"/>
+                    <property name="serviceClass"/>
+                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/cxf/proxy-service"/>
+                    <property name="payload" value="body"/>
+                    <property name="configuration-ref"/>
+                    <property name="namespace" value="urn:riv:itintegration:monitoring:PingForConfiguration2:1:rivtabp21"/>
+                    <property name="validationEnabled"/>
+                    <property name="bindingId"/>
+                    <property name="onException"/>
+                    <property name="service" value="PingForConfigurationResponderService"/>
+                    <property name="mtomEnabled"/>
+                    <property name="soapVersion"/>
+                    <property name="enableMuleSoapHeaders" value="false"/>
+                    <property name="auxiliary;index" value="18"/>
+                </properties>
+            </pattern>
+            <splitter index="19" name="Choice" type="org.mule.tooling.ui.modules.core.pattern.cbr" entity-id="Choice#3">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property-collection name="9c7e839c-5908-4feb-82e1-fb747ed57488">
+                        <property name="choice.otherwise" value="true"/>
+                        <property-collection name="choice.attributes"/>
+                    </property-collection>
+                    <property-collection name="e62efa3a-9267-44ef-80c8-ecb5cc6b070d">
+                        <property name="choice.expression" value="#[SOAPAddress == '0']"/>
+                        <property-collection name="choice.attributes">
+                            <property name="expression" value="#[SOAPAddress == '0']"/>
+                        </property-collection>
+                    </property-collection>
+                </properties>
+                <pattern name="Choice" type="org.mule.tooling.ui.modules.core.pattern.cbr" entity-id="Choice#4"/>
+                <compartment entity-id="compartment#2">
+                    <lane hadOnlyOneElement="false" index="21" isChoiceOtherwiseLane="false" entity-id="e62efa3a-9267-44ef-80c8-ecb5cc6b070d">
+                        <pattern name="Return SOAP Fault" type="http://www.mulesoft.org/schema/mule/core/expression-component" entity-id="Expression#1">
+                            <graphicalData x="0" y="0" width="0" height="0"/>
+                            <properties>
+<property name="expression" value="message.payload = '&lt;soap:Fault xmlns:soap=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;&gt;'&#xA;                 + '&lt;faultcode&gt;Client&lt;/faultcode&gt;&lt;faultstring&gt;The Logical Address or the namespace for the Logical Address is missing a configured SOAP Address for  pingForConfiguration&lt;/faultstring&gt;'&#xA;                 + '&lt;/soap:Fault&gt;'&#xA;                 "/>
+<property name="file"/>
+<property name="evaluator"/>
+<property name="auxiliary;index" value="21"/>
+                            </properties>
+                        </pattern>
+                        <pattern name="Object to String" type="http://www.mulesoft.org/schema/mule/core/object-to-string-transformer" entity-id="Object to String#2">
+                            <graphicalData x="0" y="0" width="0" height="0"/>
+                            <properties>
+<property name="returnClass"/>
+<property name="ignoreBadInput"/>
+<property name="encoding"/>
+<property name="auxiliary;index" value="22"/>
+<property name="mimeType"/>
+                            </properties>
+                        </pattern>
+                    </lane>
+                    <lane hadOnlyOneElement="false" index="24" isChoiceOtherwiseLane="true" entity-id="9c7e839c-5908-4feb-82e1-fb747ed57488">
+                        <pattern name="SOAP" type="http://www.mulesoft.org/schema/mule/cxf/soapComponent" entity-id="SOAP#2">
+                            <graphicalData x="0" y="0" width="0" height="0"/>
+                            <properties>
+<property name="wsdlLocation"/>
+<property name="port"/>
+<property name="serviceClass"/>
+<property name="operation"/>
+<property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/cxf/proxy-client"/>
+<property name="mtomEnabled"/>
+<property name="payload" value="body"/>
+<property name="enableMuleSoapHeaders"/>
+<property name="configuration-ref"/>
+<property name="auxiliary;index" value="24"/>
+<property name="decoupledEndpoint"/>
+                            </properties>
+                        </pattern>
+                        <endpoint direction="Outbound" message-exchange-pattern="RequestResponse" name="HTTP" type="http://www.mulesoft.org/schema/mule/http/endpoint" entity-id="HTTP#2">
+                            <graphicalData x="0" y="0" width="0" height="0"/>
+                            <properties>
+<property name="port"/>
+<property name="host"/>
+<property name="businessEventsLabel"/>
+<property name="followRedirects"/>
+<property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/http/endpoint"/>
+<property name="keep-alive"/>
+<property name="contentType"/>
+<property name="disableTransportTransformer"/>
+<property name="password"/>
+<property name="exchange-pattern" value="request-response"/>
+<property name="tracking:enable-default-events"/>
+<property name="ref"/>
+<property name="transformer-refs"/>
+<property name="httpLabel"/>
+<property name="address" value="http://#[SOAPAddress]"/>
+<property name="path"/>
+<property name="encoding"/>
+<property name="responseTransformer-refs"/>
+<property name="method" value="POST"/>
+<property name="user"/>
+<property name="auxiliary;index" value="25"/>
+<property name="responseTimeout"/>
+<property name="mimeType"/>
+<property name="connector-ref"/>
+                            </properties>
+                        </endpoint>
+                    </lane>
+                </compartment>
+            </splitter>
+            <unknown description="false" index="26" entity-id="unknown#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
                 <content>&lt;custom-exception-strategy xmlns=&quot;http://www.mulesoft.org/schema/mule/core&quot; class=&quot;org.soitoolkit.commons.mule.error.ServiceExceptionStrategy&quot;/&gt;</content>
             </unknown>
         </lane>

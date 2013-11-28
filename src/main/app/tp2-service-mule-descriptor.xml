@@ -32,47 +32,71 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 			connector-ref="VPProducerConnector" doc:name="HTTP" />
 
 		<object-to-string-transformer doc:name="Object to String" />
-
-
-		<set-variable variableName="nameSpace"
-			value="#[xpath('/soapenv:Envelope/soapenv:Body/urn1:PingForConfiguration/urn1:serviceContractNamespace').text]"
-			doc:name="Set namespace" />
-		<set-variable variableName="logicalAddress"
-			value="#[xpath('/soapenv:Envelope/soapenv:Body/urn1:PingForConfiguration/urn1:logicalAddress').text]"
-			doc:name="Set Logical address" />
-
-
-		<cxf:proxy-service
-			namespace="urn:riv:itintegration:monitoring:PingForConfiguration2:1:rivtabp21"
-			service="PingForConfigurationResponderService" payload="envelope"
-			wsdlLocation="classpath:/schemas/interactions/PingForConfigurationInteraction/PingForConfigurationInteraction_1.0_RIVTABP21.wsdl"
-			doc:name="SOAP Proxy" />
-
-		<scripting:component doc:name="Create SOAP Address">
-			<scripting:script engine="Groovy"><![CDATA[def nameSpace = flowVars.nameSpace
-def logicalAddress = flowVars.logicalAddress
-
-if ( nameSpace == "urn:riv:clinicalprocess:logistics:logistics" ) {
-	if ( logicalAddress == "SE2321000016-A1DB" ) {
-		flowVars['httpAddress'] = "33.33.33.33:8088/mockPingForConfigurationResponderBinding"
+		
+		<choice doc:name="Choice">
+		<when expression="#[!message.payload.startsWith('/')]">
+		
+		<set-variable variableName="nameSpace" value="#[xpath('/soapenv:Envelope/soapenv:Body/urn1:PingForConfiguration/urn1:serviceContractNamespace').text]" doc:name="Set NameSpace"/>
+                <set-variable variableName="logicalAddress" value="#[xpath('/soapenv:Envelope/soapenv:Body/urn1:PingForConfiguration/urn1:logicalAddress').text]" doc:name="set logicalAddress"/>
+                <set-variable variableName="PFCAddresses"
+			value="#[Thread.currentThread().getContextClassLoader().getResourceAsStream('PFCAddresses.xml')]"
+			doc:name="Read configXML" />
+                <scripting:component doc:name="Groovy">
+                    <scripting:script engine="Groovy"><![CDATA[def xml = PFCAddresses.getText()
+def PFCAddresses = new XmlParser().parseText(xml)
+log.info("PFCAddressesfile: " + xml)
+def nameSpace = flowVars.nameSpace
+def logicalAddress = flowVars.logicaladdress
+flowVars['SOAPAddress'] = 0
+int	allAddresses = PFCAddresses.logicalAddress.size()
+for (int i = 0; i < allAddresses; i++)
+{
+	log.info("in address no: " + i)
+	if ( PFCAddresses.logicalAddress[i].'@value' == logicalAddress )
+	{
+		log.info("logicalAddress is: " + PFCAddresses.logicalAddress[i].'@value')
+		int allNamespaces = PFCAddresses.logicalAddress[i].nameSpace.size()
+		for (int j = 0; j < allNamespaces; j++)
+		{	 
+		log.info("in nameSpace no: " + j)
+		if ( PFCAddresses.logicalAddress[i].nameSpace[j].'@value' == nameSpace )
+			{ 
+				log.info("found namespace: " + PFCAddresses.logicalAddress[i].nameSpace[j].'@value' + "setting SOAPAddress to: " + PFCAddresses.logicalAddress[i].nameSpace[j].PFCAddress.text() )
+				flowVars.SOAPAddress = PFCAddresses.logicalAddress[i].nameSpace[j].PFCAddress.text()
+			}
+		}
 	}
 }
-else if ( nameSpace == "urn:riv:clinicalprocess:healthcond:actoutcome" ) {
-	if ( logicalAddress == "SE2321000016-A1DB" ) {
-		flowVars['httpAddress'] = "33.33.33.33:8088/mockPingForConfigurationResponderBinding"
-	}
-}
-else if ( nameSpace == "urn:riv:clinicalprocess:healthcond:description" ) {
-	if ( logicalAddress == "SE2321000016-A1DB" ) {
-		flowVars['httpAddress'] = "33.33.33.33:8088/mockPingForConfigurationResponderBinding"
-	}
-}
-else {
-	flowVars['httpAddress'] = "Error message"
-	}
 
 return payload]]></scripting:script>
-		</scripting:component>
+                </scripting:component>
+
+		<set-variable variableName="logicalAdress" value="#[SOAPAddress]" doc:name="Variable"/>
+		</when>
+            <otherwise>
+                <logger message="WSDL request" level="INFO" doc:name="Logger"/>
+			</otherwise>
+        </choice>
+        
+        
+		<cxf:proxy-service namespace="urn:riv:itintegration:monitoring:PingForConfiguration2:1:rivtabp21" service="PingForConfigurationResponderService" payload="body" wsdlLocation="classpath:/schemas/interactions/PingForConfigurationInteraction/PingForConfigurationInteraction_1.0_RIVTABP21.wsdl" enableMuleSoapHeaders="false" doc:name="SOAP"/>
+        <choice doc:name="Choice">
+ 			<when expression="#[SOAPAddress == '0']">
+                <expression-component doc:name="Return SOAP Fault"><![CDATA[message.payload = '<soap:Fault xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">'
+                 + '<faultcode>Client</faultcode><faultstring>The Logical Address or the namespace for the Logical Address is missing a configured SOAP Address for  pingForConfiguration</faultstring>'
+                 + '</soap:Fault>']]>
+                 </expression-component>
+                <object-to-string-transformer doc:name="Object to String"/>
+ 			</when>
+            <otherwise>
+
+             	<cxf:proxy-client  payload="body" doc:name="SOAP"/>
+
+                <http:outbound-endpoint exchange-pattern="request-response" method="POST" address="http://#[SOAPAddress]" doc:name="HTTP">
+               
+                </http:outbound-endpoint>
+            </otherwise>
+        </choice>
 
 
 
@@ -80,8 +104,7 @@ return payload]]></scripting:script>
 			<cxf:proxy-service namespace="urn:riv:itintegration:monitoring:PingForConfiguration2:1:rivtabp21" 
 			service="PingForConfigurationResponderService" payload="envelope" wsdlLocation="classpath:/schemas/interactions/PingForConfigurationInteraction/PingForConfigurationInteraction_1.0_RIVTABP21.wsdl" 
 			doc:name="CallProducerService"/> -->
-		<http:outbound-endpoint exchange-pattern="request-response"
-			method="POST" address="http://#[httpAddress]" doc:name="HTTP" />
+		
 		<custom-exception-strategy
 			class="org.soitoolkit.commons.mule.error.ServiceExceptionStrategy"></custom-exception-strategy>
 	</flow>
