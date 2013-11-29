@@ -38,31 +38,35 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 		
 		<set-variable variableName="nameSpace" value="#[xpath('/soapenv:Envelope/soapenv:Body/urn1:PingForConfiguration/urn1:serviceContractNamespace').text]" doc:name="Set NameSpace"/>
                 <set-variable variableName="logicalAddress" value="#[xpath('/soapenv:Envelope/soapenv:Body/urn1:PingForConfiguration/urn1:logicalAddress').text]" doc:name="set logicalAddress"/>
-                <set-variable variableName="PFCAddresses"
+                <!-- <set-variable variableName="PFCAddresses"
 			value="#[Thread.currentThread().getContextClassLoader().getResourceAsStream('PFCAddresses.xml')]"
+			doc:name="Read configXML" /> -->
+			<set-variable variableName="PFCAddresses"
+			value="#[new java.io.FileInputStream(new java.io.File(mule.home, '/conf/PFCAddresses.xml'))]"
 			doc:name="Read configXML" />
                 <scripting:component doc:name="Groovy">
                     <scripting:script engine="Groovy"><![CDATA[def xml = PFCAddresses.getText()
-def PFCAddresses = new XmlParser().parseText(xml)
+PFCAddresses.close()
+def Addresses = new XmlParser().parseText(xml)
 log.info("PFCAddressesfile: " + xml)
 def nameSpace = flowVars.nameSpace
 def logicalAddress = flowVars.logicaladdress
 flowVars['SOAPAddress'] = 0
-int	allAddresses = PFCAddresses.logicalAddress.size()
+int	allAddresses = Addresses.logicalAddress.size()
 for (int i = 0; i < allAddresses; i++)
 {
 	log.info("in address no: " + i)
-	if ( PFCAddresses.logicalAddress[i].'@value' == logicalAddress )
+	if ( Addresses.logicalAddress[i].'@value' == logicalAddress )
 	{
-		log.info("logicalAddress is: " + PFCAddresses.logicalAddress[i].'@value')
-		int allNamespaces = PFCAddresses.logicalAddress[i].nameSpace.size()
+		log.info("logicalAddress is: " + Addresses.logicalAddress[i].'@value')
+		int allNamespaces = Addresses.logicalAddress[i].nameSpace.size()
 		for (int j = 0; j < allNamespaces; j++)
 		{	 
 		log.info("in nameSpace no: " + j)
-		if ( PFCAddresses.logicalAddress[i].nameSpace[j].'@value' == nameSpace )
+		if ( Addresses.logicalAddress[i].nameSpace[j].'@value' == nameSpace )
 			{ 
-				log.info("found namespace: " + PFCAddresses.logicalAddress[i].nameSpace[j].'@value' + "setting SOAPAddress to: " + PFCAddresses.logicalAddress[i].nameSpace[j].PFCAddress.text() )
-				flowVars.SOAPAddress = PFCAddresses.logicalAddress[i].nameSpace[j].PFCAddress.text()
+				log.info("found namespace: " + Addresses.logicalAddress[i].nameSpace[j].'@value' + "setting SOAPAddress to: " + Addresses.logicalAddress[i].nameSpace[j].PFCAddress.text() )
+				flowVars.SOAPAddress = Addresses.logicalAddress[i].nameSpace[j].PFCAddress.text()
 			}
 		}
 	}
