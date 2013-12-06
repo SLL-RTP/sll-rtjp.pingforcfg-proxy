@@ -17,7 +17,7 @@ DON'T CHANGE THE CONTENT OF THIS COMMENT UNLESS YOU REALLY KNOW WHAT YOU ARE DOI
     
     <groupId>se.sll.sll-rtjp.pingforcfg-proxy</groupId>
     <artifactId>pingforcfg-proxy</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>mule</packaging>
     <name>pingforcfg-proxy</name>
 
