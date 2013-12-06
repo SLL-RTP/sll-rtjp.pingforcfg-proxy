@@ -17,7 +17,7 @@
  specific language governing permissions and limitations
  under the License.
  -->		
-<wsdl:definitions name='PingForConfigurationInteraction' xmlns:wsdl='http://schemas.xmlsoap.org/wsdl/' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:rgy='urn:riv:itintegration:registry:1' xmlns:tjsr='urn:riv:itintegration:monitoring:PingForConfigurationResponder:1' xmlns:tjsi='urn:riv:itintegration:monitoring:PingForConfigurationInitiator:1' xmlns:tns='urn:riv:itintegration:monitoring:PingForConfiguration2:1:rivtabp21' targetNamespace='urn:riv:itintegration:monitoring:PingForConfiguration2:1:rivtabp21'>
+<wsdl:definitions name='PingForConfigurationInteraction' xmlns:wsdl='http://schemas.xmlsoap.org/wsdl/' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:rgy='urn:riv:itintegration:registry:1' xmlns:tjsr='urn:riv:itintegration:monitoring:PingForConfigurationResponder:1' xmlns:tjsi='urn:riv:itintegration:monitoring:PingForConfigurationInitiator:1' xmlns:tns='urn:riv:itintegration:monitoring:PingForConfiguration:1:rivtabp21' targetNamespace='urn:riv:itintegration:monitoring:PingForConfiguration:1:rivtabp21'>
   <xs:annotation>
     <xs:documentation>
 			 Tjänsteinteraktionens namn: PingForConfigurationInteraction
@@ -72,7 +72,7 @@
   </wsdl:binding>
   <wsdl:service name='PingForConfigurationResponderService'>
     <wsdl:port name='PingForConfigurationResponderPort' binding='tns:PingForConfigurationResponderBinding'>
-      <soap:address location='http://localhost:20000/vp/itintegration/monitoring/PingForConfiguration2/1/rivtabp21' />
+      <soap:address location='http://localhost:20000/vp/itintegration/monitoring/PingForConfiguration/1/rivtabp21' />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

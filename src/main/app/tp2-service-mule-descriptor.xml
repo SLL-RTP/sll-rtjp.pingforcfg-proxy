@@ -28,7 +28,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 
 	<flow name="PFCAdapterService-service" doc:name="PFCAdapterService-service">
 		<https:inbound-endpoint exchange-pattern="request-response"
-			address="https://${TP_HOST}:${TP_PORT}/${TP_BASE_URI}/itintegration/monitoring/PingForConfiguration2/1/rivtabp21"
+			address="https://${TP_HOST}:${TP_PORT}/${TP_BASE_URI}/itintegration/monitoring/PingForConfiguration/1/rivtabp21"
 			connector-ref="VPProducerConnector" doc:name="HTTP" />
 
 		<object-to-string-transformer doc:name="Object to String" />
@@ -83,7 +83,7 @@ return payload]]></scripting:script>
         </choice>
         
         
-		<cxf:proxy-service namespace="urn:riv:itintegration:monitoring:PingForConfiguration2:1:rivtabp21" service="PingForConfigurationResponderService" payload="body" wsdlLocation="classpath:/schemas/interactions/PingForConfigurationInteraction/PingForConfigurationInteraction_1.0_RIVTABP21.wsdl" enableMuleSoapHeaders="false" doc:name="SOAP"/>
+		<cxf:proxy-service namespace="urn:riv:itintegration:monitoring:PingForConfiguration:1:rivtabp21" service="PingForConfigurationResponderService" payload="body" wsdlLocation="classpath:/schemas/interactions/PingForConfigurationInteraction/PingForConfigurationInteraction_1.0_RIVTABP21.wsdl" enableMuleSoapHeaders="false" doc:name="SOAP"/>
         <choice doc:name="Choice">
  			<when expression="#[SOAPAddress == '0']">
                 <expression-component doc:name="Return SOAP Fault"><![CDATA[message.payload = '<soap:Fault xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">'

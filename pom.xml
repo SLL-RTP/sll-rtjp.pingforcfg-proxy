@@ -15,31 +15,29 @@ DON'T CHANGE THE CONTENT OF THIS COMMENT UNLESS YOU REALLY KNOW WHAT YOU ARE DOI
         <version>0.6.0</version>
     </parent>
     
-    <groupId>se.skl.skltpservices.pingForConfiguration</groupId>
-    <artifactId>PFCAdapterComponent</artifactId>
+    <groupId>se.sll.sll-rtjp.pingforcfg-proxy</groupId>
+    <artifactId>pingforcfg-proxy</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>mule</packaging>
-    <name>PFCAdapterComponent</name>
+    <name>pingforcfg-proxy</name>
 
-    <scm>
-        <!-- TODO: Sample <scm>-tag, update to reflect you own environment! -->
-        <connection>scm:svn:https://my-subversion-server/svn/PFCAdapterComponent/trunk</connection>
-        <developerConnection>scm:svn:https://my-subversion-server/svn/PFCAdapterComponent/trunk</developerConnection>
-        <url>https://my-subversion-server/svn/PFCAdapterComponent/trunk</url>
-    </scm>
+  <!--   <scm>
+        TODO: Sample <scm>-tag, update to reflect you own environment!
+        <connection>scm:svn:https://my-subversion-server/svn/PFCAdapterComponent/tags/1.0.0</connection>
+        <developerConnection>scm:svn:https://my-subversion-server/svn/PFCAdapterComponent/tags/1.0.0</developerConnection>
+        <url>https://my-subversion-server/svn/PFCAdapterComponent/tags/1.0.0</url>
+    </scm> -->
     
     <distributionManagement>
         <!-- TODO: Sample <distributionManagement>-tag, update to reflect you own environment! -->
-        <snapshotRepository>
-            <id>snapshots</id>
-            <name>Snapshot Repository</name>
-            <url>http://my-maven-repo-server/repositories/snapshots</url>
-        </snapshotRepository>  
-        <repository>
-            <id>releases</id>
-            <name>Release Repository</name>
-            <url>http://my-maven-repo-server/repositories/releases</url>
-        </repository>
+		<repository>
+			<id>releases</id>
+			<url>http://172.16.28.126:8081/nexus/content/repositories/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>snapshots</id>
+			<url>http://172.16.28.126:8081/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
     </distributionManagement>
 
 	<dependencies>	
@@ -202,10 +200,10 @@ DON'T CHANGE THE CONTENT OF THIS COMMENT UNLESS YOU REALLY KNOW WHAT YOU ARE DOI
 
     </build>
 
-    <profiles>
+   <!--  <profiles>
         <profile>
             <id>muleServer</id>
-            <!-- Start mule server with the command "mvn -PmuleServer" or "mvn -PmuleServer -Dexec.args="${artifaceId}-config.xml"" if you want to override the default config-file -->
+            Start mule server with the command "mvn -PmuleServer" or "mvn -PmuleServer -Dexec.args="${artifaceId}-config.xml"" if you want to override the default config-file
             <build>
                 <defaultGoal>test</defaultGoal>
                 <plugins>
@@ -234,5 +232,5 @@ DON'T CHANGE THE CONTENT OF THIS COMMENT UNLESS YOU REALLY KNOW WHAT YOU ARE DOI
                 </plugins>
             </build>
         </profile>
-    </profiles>
+    </profiles> -->
 </project>
